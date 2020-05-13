@@ -9,6 +9,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - jupyterhub_data:/srv/jupyterhub
     environment:
+      DOCKER_JUPYTER_IMAGE: jupyter/scipy-notebook:3b1f4f5e6cc1
       - DOCKER_JUPYTER_CONTAINER=jupyterlab_img
       - DOCKER_NETWORK_NAME=${COMPOSE_PROJECT_NAME}_default
       - HUB_IP=jupyterhub
@@ -19,8 +20,8 @@ services:
     restart: on-failure
 
   jupyterlab:
-    build: jupyterlab
-    image: jupyterlab_img
+    # build: jupyterlab
+    image: jupyter/scipy-notebook:3b1f4f5e6cc1
     container_name: jupyterlab-throaway
     network_mode: none
     command: echo
