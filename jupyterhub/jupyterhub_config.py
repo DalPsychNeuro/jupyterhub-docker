@@ -16,20 +16,27 @@ c.JupyterHub.admin_access = True
 c.Spawner.default_url = '/lab'
 
 ## Authenticator
-from jhub_cas_authenticator.cas_auth import CASAuthenticator
-c.JupyterHub.authenticator_class = CASAuthenticator
+# use GitHub OAuthenticator for local users
+# based on https://jupyterhub.readthedocs.io/en/stable/reference/config-ghoauth.html
+c.JupyterHub.authenticator_class = 'oauthenticator.LocalGitHubOAuthenticator'
+c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
+
+# from jhub_cas_authenticator.cas_auth import CASAuthenticator
+# c.JupyterHub.authenticator_class = CASAuthenticator
 
 # The CAS URLs to redirect (un)authenticated users to.
-c.CASAuthenticator.cas_login_url = 'https://cas.uvsq.fr/login'
-c.CASLocalAuthenticator.cas_logout_url = 'https://cas.uvsq/logout'
+# c.CASAuthenticator.cas_login_url = 'https://cas.uvsq.fr/login'
+# c.CASLocalAuthenticator.cas_logout_url = 'https://cas.uvsq/logout'
 
 # The CAS endpoint for validating service tickets.
-c.CASAuthenticator.cas_service_validate_url = 'https://cas.uvsq.fr/serviceValidate'
+# c.CASAuthenticator.cas_service_validate_url = 'https://cas.uvsq.fr/serviceValidate'
 
 # The service URL the CAS server will redirect the browser back to on successful authentication.
 c.CASAuthenticator.cas_service_url = 'https://%s/hub/login' % os.environ['HOST']
 
-c.Authenticator.admin_users = { 'lucadefe' }
+c.Authenticator.whitelist = {'aaron', 'aaronjnewman'}
+
+c.Authenticator.admin_users = { 'aaron', 'aaronjnewman' }
 
 
 ## Docker spawner
@@ -47,7 +54,7 @@ c.DockerSpawner.volumes = { 'jupyterhub-user-{username}': notebook_dir }
 
 # Other stuff
 c.Spawner.cpu_limit = 1
-c.Spawner.mem_limit = '10G'
+c.Spawner.mem_limit = '2G'
 
 
 ## Services
